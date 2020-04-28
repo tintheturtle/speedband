@@ -2,28 +2,39 @@ import time
 import psutil
 
 def main():
-    old_value = 0
+    # Original value of bandwidth usage is 0
+    oldBandwidth = 0
 
-    initialized: float = time.perf_counter()
-    print(initialized)
-    
-
+    # int for week in seconds
+    weekSeconds: int = 604800
+        
     while True:
-        print(initialized)
 
-        new_value = psutil.net_io_counters().bytes_sent + psutil.net_io_counters().bytes_recv
+        # int of current time since script started
+        current: int = int(time.perf_counter())
 
-        if old_value:
-            send_stat(new_value - old_value)
+        # Checks for if a week has passed
+        if ((current % weekSeconds) == 0 and current != 0):
+            print("True")
 
-        old_value = new_value
+        # Get network values from psutil
+        newBandwidth = psutil.net_io_counters().bytes_sent + psutil.net_io_counters().bytes_recv
 
+        # Comparing oldBandwidth with newBandwidth
+        if oldBandwidth:
+            send_stat(newBandwidth - oldBandwidth)
+
+        # Set new bandwidth
+        oldBandwidth = newBandwidth
+
+        # Continuing function every second instead of continuously
         time.sleep(1)
 
 
+# Converting to gigabytes
 def convert_to_gbit(value):
     return value/1024./1024./1024.*8
 
-
+# Printing value
 def send_stat(value):
     return print("%0.3f" % convert_to_gbit(value))
