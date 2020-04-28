@@ -5,9 +5,17 @@ def main():
     # Original value of bandwidth usage is 0
     oldBandwidth = 0
 
-    # int for week in seconds
+    # int for week in seconds and for day in seconds
     weekSeconds: int = 604800
+    daySeconds: int = 86400
+
+    # Array for collecting daily usage times
+    daily = []
+
+    # Array for collecting average daily  usage times
+    dailyAverage = []
         
+
     while True:
 
         # int of current time since script started
@@ -15,7 +23,26 @@ def main():
 
         # Checks for if a week has passed
         if ((current % weekSeconds) == 0 and current != 0):
-            print("True")
+            print(dailyAverage)
+            
+            # Reset array for next week
+            dailyAverage = []
+
+            print("Weekly")
+
+        if ((current % daySeconds) == 10 and current != 0): 
+
+            # Computer daily average
+            averageValue = average(daily)
+            dailyAverage += [averageValue]
+
+            print(daily)
+
+
+            # Reset array for next day
+            daily = []
+
+            print("Daily")
 
         # Get network values from psutil
         newBandwidth = psutil.net_io_counters().bytes_sent + psutil.net_io_counters().bytes_recv
@@ -23,12 +50,22 @@ def main():
         # Comparing oldBandwidth with newBandwidth
         if oldBandwidth:
             send_stat(newBandwidth - oldBandwidth)
+            daily += [round(convert_to_gbit(newBandwidth - oldBandwidth), 4)]
 
         # Set new bandwidth
         oldBandwidth = newBandwidth
 
         # Continuing function every second instead of continuously
         time.sleep(1)
+
+
+# Getting average of day
+def average(array):
+    counter = 0
+    for i in array:
+        counter += i
+    counter = counter / len(array)
+    return counter
 
 
 # Converting to gigabytes
