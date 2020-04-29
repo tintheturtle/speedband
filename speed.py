@@ -9,7 +9,7 @@ def main():
     return 1
 
 
-def calculateRates():
+def calculate_rates():
     # Initial time of function call
     t0 = time.time()
 
@@ -44,7 +44,7 @@ def calculateRates():
         if dl > 0.1 or ul >= 0.1:
             time.sleep(0.25)
 
-calculateRates()
+calculate_rates()
 
 # Upload --> bytes_sent
 # Download --> bytes_received
