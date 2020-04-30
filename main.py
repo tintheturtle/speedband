@@ -37,7 +37,7 @@ def main():
     while (True):
 
         current: int = int(time.perf_counter())
-        if (current % weekSeconds == 60 and current != 0):
+        if (current % weekSeconds == 0 and current != 0):
             return download_collection, upload_collection, dailyAverage
 
         # Bandwidth speed
@@ -65,7 +65,7 @@ def main():
             print()
 
         # Usage 
-        if ((current % daySeconds) == 10 and current != 0): 
+        if ((current % daySeconds) == 0 and current != 0): 
 
             # Computer daily average
             averageValue = average(daily)
@@ -102,4 +102,4 @@ def average(array):
 def convert_to_gbit(value):
     return value/1024./1024./1024.*8
 
-print(main())
+main()
