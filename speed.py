@@ -5,9 +5,9 @@ import psutil
 import os
 
 def main():
-    print('done')
-    return 1
-
+    rates = calculate_rates()
+    print('Returning rate here: ')
+    return rates
 
 def calculate_rates():
     # Initial time of function call
@@ -22,7 +22,18 @@ def calculate_rates():
 
     up_down = (upload, download)
 
+    download_collection = []
+    upload_collection = []
+    
+    weekSeconds: int = 604800
+
     while(True):
+
+        current: int = int(time.perf_counter())
+
+        if ((current % weekSeconds) == 30 and current != 0):
+            return download_collection, upload_collection
+
         last_up_down = up_down
 
         upload = psutil.net_io_counters().bytes_sent
@@ -37,14 +48,14 @@ def calculate_rates():
         except:
             pass
 
+        if ul > 2000:
+            upload_collection += [ul]
+        if dl > 2000: 
+            download_collection += [dl]
+        
         if dl > 2000 or ul > 2000:
             print('UL: {:0.2f} kB/s \n'.format(ul)+'DL: {:0.2f} kB/s'.format(dl))
             print()
 
         if dl > 0.1 or ul >= 0.1:
             time.sleep(0.25)
-
-calculate_rates()
-
-# Upload --> bytes_sent
-# Download --> bytes_received

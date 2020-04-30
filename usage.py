@@ -22,13 +22,10 @@ def main():
         current: int = int(time.perf_counter())
 
         # Checks for if a week has passed
-        if ((current % weekSeconds) == 0 and current != 0):
-            print(dailyAverage)
-            
+        if ((current % weekSeconds) == 30 and current != 0):            
             # Reset array for next week
-            dailyAverage = []
+            return dailyAverage
 
-            print("Weekly")
 
         if ((current % daySeconds) == 10 and current != 0): 
 
@@ -36,20 +33,14 @@ def main():
             averageValue = average(daily)
             dailyAverage += [averageValue]
 
-            print(daily)
-
-
             # Reset array for next day
             daily = []
-
-            print("Daily")
 
         # Get network values from psutil
         newBandwidth = psutil.net_io_counters().bytes_sent + psutil.net_io_counters().bytes_recv
 
         # Comparing oldBandwidth with newBandwidth
         if oldBandwidth:
-            send_stat(newBandwidth - oldBandwidth)
             daily += [round(convert_to_gbit(newBandwidth - oldBandwidth), 4)]
 
         # Set new bandwidth
