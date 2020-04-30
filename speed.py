@@ -1,8 +1,5 @@
-import threading
-from collections import deque
 import time
 import psutil
-import os
 
 def main():
     rates = calculate_rates()
@@ -59,3 +56,5 @@ def calculate_rates():
 
         if dl > 0.1 or ul >= 0.1:
             time.sleep(0.25)
+
+main()
